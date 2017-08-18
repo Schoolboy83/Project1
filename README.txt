@@ -10,5 +10,10 @@
 	python3 -m pip install pygame --user
 	Если выдаст ошибку, то введите:
 	python -m pip install pygame --user
+
 Запуск:
 Запускать игру через файл RunGame.py
+
+Управление:
+Передвижение персонажа WASD
+Стрелять на стрелочки
