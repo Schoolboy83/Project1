@@ -107,5 +107,5 @@ class Enemy1(sprite.Sprite):
                     self.rect.top = Sprite.rect.bottom
                     self.Yspeed = 0
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
+    def draw(self, screen, camera):
+        screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))

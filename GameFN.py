@@ -2,13 +2,13 @@ import pygame
 from pygame import *
 from Bullet import *
 
-WIN_WIDTH = 800
+WIN_WIDTH = 960
 WIN_HEIGHT = 640
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 BACKGROUND_COLOR = "#004400"
 last=pygame.time.get_ticks()
 
-def events(player,bullets):
+def events(player,bullets,camera,bonusesgot):
     inmenu = False
 
     for event in pygame.event.get():
@@ -19,10 +19,12 @@ def events(player,bullets):
 
             if event.key == K_RIGHT:
                 if player.CanShoot():
-                    bullets.add(YourBullet(player, True))
+                    bullets.add(YourBullet(player, True, bonusesgot))
+                    bonusesgot -= 2
             if event.key == K_LEFT:
                 if player.CanShoot():
-                    bullets.add(YourBullet(player, False))
+                    bullets.add(YourBullet(player, False, bonusesgot))
+                    bonusesgot -= 2
             if event.key == K_ESCAPE:
                 if not inmenu:
                     player.moveright = False
@@ -51,7 +53,7 @@ def events(player,bullets):
 def menu():
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY)
-    pygame.display.set_caption("Menu")
+    pygame.display.set_caption("Game")
     bg = Surface((WIN_WIDTH, WIN_HEIGHT))
     bg.fill(Color("#FFFFFF"))
     myfont = pygame.font.SysFont("arial", 50, False, False)
@@ -71,9 +73,24 @@ def menu():
 
 
 
-def draw(screen,player,group,bullets,enemies, hits):
-    player.draw()
-    bullets.draw(screen)
-    group.draw(screen)
-    enemies.draw(screen)
-    hits.draw(screen)
+def draw(screen,player,group,bullets,enemies, hits,bonuses,camera):
+
+    for bullet in bullets:
+        bullet.draw(screen, camera)
+
+    for block in group:
+        block.draw(screen, camera)
+
+    player.draw(camera)
+
+    for hit in hits:
+        hit.draw(screen, camera)
+
+    for enemy in enemies:
+        enemy.draw(screen, camera)
+    for bonus in bonuses:
+        bonus.draw(screen, camera)
+    pygame.display.flip()
+
+
+

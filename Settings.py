@@ -1,6 +1,6 @@
 class GameSettings():
     def __init__(self):
-        self.movespeeed = 12
+        self.movespeeed = 16
         self.jumpspeed = 27
         self.gravity = 2
         self.playerHP = 100

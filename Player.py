@@ -102,7 +102,7 @@ class Character(sprite.Sprite):
             self.healthcount = self.font.render(str(self.HP), 1, Color('#FFFFFF'))
             return True
 
-    def draw(self):
-        self.screen.blit(self.image, (self.rect))
+    def draw(self,camera):
+        self.screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))
         self.screen.blit(self.healthcount, (10, 10))
         pass

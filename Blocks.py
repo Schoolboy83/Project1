@@ -16,7 +16,7 @@ class Block(sprite.Sprite):
 
 
 
-    def draw(self,screen):
-        screen.blit(self.image, self.rect)
+    def draw(self, screen,camera):
+        screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))
 
 

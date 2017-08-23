@@ -4,7 +4,7 @@ from Images import *
 
 
 class YourBullet(sprite.Sprite):
-    def __init__(self, player, direction):
+    def __init__(self, player, direction, bonusesgot):
         images = Images()
         settings = GameSettings()
         sprite.Sprite.__init__(self)
@@ -13,7 +13,10 @@ class YourBullet(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centery = player.rect.centery
         self.range = settings.playerBulletRange
-        self.damage = settings.playerBulletDamage
+        if bonusesgot == 3:
+            self.damage = 9999999999
+        else:
+            self.damage = settings.playerBulletDamage*(bonusesgot+1)
         if direction:
             self.rect.left = player.rect.right
         else:
@@ -24,5 +27,5 @@ class YourBullet(sprite.Sprite):
         self.rect.x += self.speed
         self.range -= abs(self.speed)
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
+    def draw(self, screen,camera):
+        screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))
