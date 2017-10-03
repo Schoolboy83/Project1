@@ -4,12 +4,10 @@ from Images import *
 class Bonus(sprite.Sprite):
     def __init__(self, image, x, y,bonusesgot):
         sprite.Sprite.__init__(self)
-        self.x = x
-        self.y = y
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.left = x
-        self.rect.bottom = y
+        self.rect.bottom = y+32
         self.bonusesgot = bonusesgot
 
     def collision(self, player):

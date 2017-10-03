@@ -22,6 +22,7 @@ class Enemy1(sprite.Sprite):
         self.hitCD = settings.enemy1hitCD
         self.direction = None
         self.HP = settings.enemy1HP
+        self.id ='Enemy1'
 
     def update(self, group, player):
         if self.onGround:
@@ -69,13 +70,13 @@ class Enemy1(sprite.Sprite):
                 self.direction = None
 
 
-    def GetShot(self, bullets):
+    def getShot(self, bullets):
         for bullet in bullets:
             if sprite.collide_rect(self, bullet):
                 self.HP -= bullet.damage
                 bullets.remove(bullet)
 
-    def CanHit(self):
+    def CanHit(self,player):
         self.hit = time.get_ticks()
         if self.hit - self.lasthit >= self.hitCD:
             self.lasthit = self.hit
@@ -106,6 +107,41 @@ class Enemy1(sprite.Sprite):
                 if self.Yspeed < 0:
                     self.rect.top = Sprite.rect.bottom
                     self.Yspeed = 0
+
+    def draw(self, screen, camera):
+        screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))
+
+class Boss(sprite.Sprite):
+    def __init__(self, x, y, screen):
+        images = Images()
+        settings = GameSettings()
+        pygame.sprite.Sprite.__init__(self)
+        self.screenrect = screen.get_rect()
+        self.image = images.Boss
+        self.rect = self.image.get_rect()
+        self.rect.right = x+32
+        self.rect.bottom = y + 32
+        self.aggroRange = settings.BossaggroRange
+        self.lasthit = time.get_ticks()
+        self.hitCD = settings.BosshitCD
+        self.HP = settings.BossHP
+        self.direction = True
+        self.id = 'Boss'
+
+
+    def getShot(self, bullets):
+        for bullet in bullets:
+            if sprite.collide_rect(self, bullet):
+                self.HP -= bullet.damage
+                bullets.remove(bullet)
+    def update(self, group, player):
+        pass
+
+
+
+    def CanHit(self,player):
+        if abs(player.rect.centerx - self.rect.centerx) <= self.aggroRange:
+            return True
 
     def draw(self, screen, camera):
         screen.blit(self.image, (self.rect.x - camera.x, self.rect.y))

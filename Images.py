@@ -10,3 +10,6 @@ class Images():
         self.enemy1hitright =pygame.image.load('Images/enemy1hitright.jpg')
         self.bonus1 = pygame.image.load('Images/bonus1.jpg')
         self.bonus2 = pygame.image.load('Images/bonus2.jpg')
+        self.Boss = pygame.image.load('Images/Boss.jpg')
+        self.BossHit = pygame.image.load('Images/BossHit.jpg')
+

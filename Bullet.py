@@ -12,8 +12,8 @@ class YourBullet(sprite.Sprite):
         self.image = images.playerBullet
         self.rect = self.image.get_rect()
         self.rect.centery = player.rect.centery
-        self.range = settings.playerBulletRange
-        if bonusesgot == 3:
+        self.range = settings.playerBulletRange*(bonusesgot+1)
+        if bonusesgot == 2:
             self.damage = 9999999999
         else:
             self.damage = settings.playerBulletDamage*(bonusesgot+1)

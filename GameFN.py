@@ -1,6 +1,7 @@
 import pygame
 from pygame import *
 from Bullet import *
+from Menu import *
 
 WIN_WIDTH = 960
 WIN_HEIGHT = 640
@@ -11,6 +12,7 @@ last=pygame.time.get_ticks()
 def events(player,bullets,camera,bonusesgot):
     inmenu = False
 
+
     for event in pygame.event.get():
 
         if event.type == QUIT:
@@ -20,17 +22,17 @@ def events(player,bullets,camera,bonusesgot):
             if event.key == K_RIGHT:
                 if player.CanShoot():
                     bullets.add(YourBullet(player, True, bonusesgot))
-                    bonusesgot -= 2
+                    return True
             if event.key == K_LEFT:
                 if player.CanShoot():
                     bullets.add(YourBullet(player, False, bonusesgot))
-                    bonusesgot -= 2
+                    return True
             if event.key == K_ESCAPE:
                 if not inmenu:
                     player.moveright = False
                     player.moveleft = False
                     player.jump = False
-                    menu()
+                    newscreen('Pause')
                     inmenu = True
             if event.key == K_d and event.key == K_a:
                 player.moveright = False

@@ -20,7 +20,7 @@ WIN_HEIGHT = 640
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 BACKGROUND_COLOR = "#004400"
 
-def deathscreen():
+def newscreen(text):
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY)
     pygame.display.set_caption("Game")
@@ -28,12 +28,21 @@ def deathscreen():
     bg.fill(Color("#FFFFFF"))
 
     myfont = pygame.font.SysFont("arial", 50, False, False)
-    label = myfont.render("You are dead, press ENTER to restart", 1, (0, 0, 0))
+    if text=='Death':
+        label = myfont.render("You are dead, press ENTER to restart", 1, (0, 0, 0))
+    elif text == 'Pause':
+        label = myfont.render("Paused Press ESC to continue...", 1, (0, 0, 0))
+    elif text == 'Win':
+        label = myfont.render("You win!!! press ENTER to restart", 1, (0, 0, 0))
     while True:
 
         for e in pygame.event.get():
-            if e.type == KEYDOWN and e.key == K_RETURN:
-                main()
+            if e.type == KEYDOWN:
+                if text == 'Death' and e.key == K_RETURN:
+                    main()
+                elif (text == 'Pause' or text == 'Win') and e.key == K_ESCAPE:
+                    return
+
 
             if e.type == QUIT:
                 raise SystemExit
@@ -67,6 +76,8 @@ def main():
                 blocks.add(Block(x, y))
             if j=='*':
                 enemies.add(Enemy1(x, y, screen))
+            if j=='^':
+                enemies.add(Boss(x, y, screen))
             if j=='a':
                 bonuses.add(Bonus(images.bonus1, x, y, bonusesgot))
             if j=='b':
@@ -78,7 +89,9 @@ def main():
 
     while True:
         if player.HP <= 0:
-            deathscreen()
+            newscreen('Death')
+        if len(enemies) == 0:
+            newscreen('Win')
         timer = pygame.time.Clock()
         timer.tick(60)
         player.update(blocks)
@@ -89,18 +102,24 @@ def main():
 
         for enemy in enemies:
             enemy.update(blocks, player)
-            enemy.GetShot(bullets)
-            if (enemy.direction == True or enemy.direction == False) and enemy.CanHit():
-                hits.add(Enemy1Hit(enemy))
+            enemy.getShot(bullets)
+            if (enemy.direction == True or enemy.direction == False) and enemy.CanHit(player):
+                if enemy.id == 'Enemy1':
+                    hits.add(Enemy1Hit(enemy))
+                if enemy.id == 'Boss':
+                    hits.add(BossHit(enemy))
             if enemy.HP <= 0:
                 enemies.remove(enemy)
         for hit in hits:
-
-            if player.DamageTaken(hit) or hit.update() or hit.hittime():
+            if (player.DamageTaken(hit) and hit.id == "Enemy1") or hit.update() or hit.hittime():
                 hits.remove(hits)
         for bonus in bonuses:
             if bonus.collision(player):
+                bonuses.remove(bonus)
                 bonusesgot += 1
+        if functions.events(player,bullets,camera,bonusesgot):
+            bonusesgot = 0
+
 
         camera.update()
         functions.events(player, bullets,camera, bonusesgot)
@@ -109,7 +128,7 @@ def main():
 
         functions.draw(screen, player, blocks, bullets,enemies, hits, bonuses, camera)
         pygame.display.update()
-        print(bonusesgot)
+
 
 
 if __name__ == "__main__":
